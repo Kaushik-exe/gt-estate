@@ -1,0 +1,42 @@
+body {
+  background: #111;
+  color: #90ee90;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.container {
+  padding: 2rem;
+}
+
+header {
+  margin-bottom: 2rem;
+}
+
+.main-content {
+  display: flex;
+  gap: 2rem;
+}
+
+.left-side {
+  flex: 2;
+}
+
+.right-side {
+  flex: 1;
+}
+
+.search-bar input {
+  padding: 0.5rem;
+  margin-right: 1rem;
+}
+
+.property-card {
+  border: 1px solid #90ee90;
+  margin: 1rem 0;
+  padding: 1rem;
+  background: #222;
+}
+
+.filters {
+  margin-bottom: 2rem;
+}
