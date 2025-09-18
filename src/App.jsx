@@ -1,34 +1,65 @@
-import React, { useState } from 'react';
-import Header from './components/Header';
-import SearchBar from './components/SearchBar';
-import PropertyList from './components/PropertyList';
-import Filters from './components/Filters';
-import TrendsChart from './components/TrendsChart';
-import propertiesData from './data/properties';
+import React, { useState } from "react";
+import Filters from "./components/Filters";
+import TrendsChart from "./components/TrendsChart";
+import properties from "./data/properties";
+import "./App.css";
+
+const PropertyCard = ({ property }) => (
+  <div className="property-card">
+    <h4>{property.name}</h4>
+    <p>{property.description}</p>
+    <span style={{ marginRight: 8, fontWeight: "bold" }}>{property.action.toUpperCase()}</span>
+    <span>{property.type.charAt(0).toUpperCase() + property.type.slice(1)}</span>
+  </div>
+);
+
+const defaultFilters = {
+  action: "buy",
+  type: "flat",
+  search: ""
+};
 
 function App() {
-  const [search, setSearch] = useState('');
-  const [filters, setFilters] = useState({
-    action: '', // buy, rent, sell
-    type: '',   // flat, row house, etc.
-  });
+  const [filters, setFilters] = useState(defaultFilters);
 
-  const filtered = propertiesData.filter((p) => {
-    return (
-      (!search || p.name.toLowerCase().includes(search.toLowerCase())) &&
-      (!filters.action || p.action === filters.action) &&
-      (!filters.type || p.type === filters.type)
-    );
-  });
+  const filteredProperties = properties.filter(
+    (p) =>
+      p.action === filters.action &&
+      p.type === filters.type &&
+      (!filters.search ||
+        p.name.toLowerCase().includes(filters.search.toLowerCase()) ||
+        p.description.toLowerCase().includes(filters.search.toLowerCase()))
+  );
 
   return (
     <div className="container">
-      <Header />
-      <SearchBar search={search} setSearch={setSearch} />
+      <header>
+        <h1>GT ESTATE</h1>
+        <p>Your real estate dashboard</p>
+      </header>
       <div className="main-content">
         <div className="left-side">
+          <div className="search-bar">
+            <input
+              type="text"
+              placeholder="Search properties..."
+              value={filters.search}
+              onChange={(e) =>
+                setFilters((f) => ({ ...f, search: e.target.value }))
+              }
+            />
+          </div>
           <Filters filters={filters} setFilters={setFilters} />
-          <PropertyList properties={filtered} />
+          <div>
+            <h3>Properties</h3>
+            {filteredProperties.length ? (
+              filteredProperties.map((property, idx) => (
+                <PropertyCard property={property} key={idx} />
+              ))
+            ) : (
+              <div>No properties found.</div>
+            )}
+          </div>
         </div>
         <div className="right-side">
           <TrendsChart />
